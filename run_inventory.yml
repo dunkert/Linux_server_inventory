@@ -1,0 +1,14 @@
+---
+- hosts: "{{ variable_host | default('all') }}"
+  vars:
+    dest: distro_list.csv
+  tasks:
+    - copy:
+        content: ''
+        dest: "{{ dest }}"
+      run_once: yes
+      delegate_to: 127.0.0.1
+    - lineinfile:
+        dest: "{{ dest }}"
+        line: '{{ inventory_hostname }},{{ ansible_distribution }},{{ ansible_distribution_major_version }},{{ ansible_distribution_version }},{{ ansible_distribution_release }},{{ansible_architecture}},{{ansible_domain}},{{ansible_mounts}},{{ansible_processor_cores}} Cores'
+      delegate_to: 127.0.0.1
